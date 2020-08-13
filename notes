@@ -1,0 +1,81 @@
+
+
+
+From Vol.h
+#include <alsa/asoundlib.h>
+Here is the Makfiel change to link alsa/asoundlib.h
+LIBS = -lasound -lSDL2 -lSDL2_mixer
+
+
+arecord -D hw:1,0 -c2 -d 0 -r 22050 -f S16_LE -V stereo teststero.wav
+
+The possible fromat
+*@{*/
+#define AUDIO_U8        0x0008  /**< Unsigned 8-bit samples */
+#define AUDIO_S8        0x8008  /**< Signed 8-bit samples */
+#define AUDIO_U16LSB    0x0010  /**< Unsigned 16-bit samples */
+#define AUDIO_S16LSB    0x8010  /**< Signed 16-bit samples */
+#define AUDIO_U16MSB    0x1010  /**< As above, but big-endian byte order */
+#define AUDIO_S16MSB    0x9010  /**< As above, but big-endian byte order */
+#define AUDIO_U16       AUDIO_U16LSB
+#define AUDIO_S16       AUDIO_S16LSB
+
+
+----------------   Getting data - woo woo ------------------------
+bytes read was:1024
+Audio Spec Freq22050
+Audio Spec Format32784
+Audio Spec Channels
+Audio Spec Silence
+Audio Spec Samples1024
+Audio Spec Size4096
+Here is a volume percent:100
+
+
+
+This POP is for going directly to the Mic to monitor the volume.
+
+Probobly going to use SDL as I have installed and ran (tested an app that uses it) that API on a BeagleGreen.
+
+
+
+----------------------------------Note this was not needed --------------------------------------
+Keeping this around:
+
+  // this came from enumerating devices.
+  //INFO:  Capture device #1: 'USB PnP Sound Device Analog Mono'
+  string deviceName = SDL_GetAudioDeviceName(1, SDL_TRUE); //     ("USB PnP Sound Device Analog Mono");
+  cout << "Here is device name for capture device #1:" << deviceName << endl;
+  m_device = SDL_OpenAudioDevice(deviceName.c_str(), SDL_TRUE, &m_AudioSpec, &m_AudioSpec, 0);
+--------------------------------------------------------------------------------------------------
+
+
+
+some search terms:
+
+SDL_AudioStream
+SDL_AudioStreamPut
+
+SDL_AudioStreamGet
+
+getting close:
+SDL_DequeueAudio
+
+
+I need the deviceID:
+Uint32 SDL_DequeueAudio(SDL_AudioDeviceID dev,
+                        void*             data,
+                        Uint32            len)
+			
+Uint32 SDL_GetQueuedAudioSize(SDL_AudioDeviceID dev)
+
+
+devid_in = SDL_OpenAudioDevice(argv[1], SDL_TRUE, &spec, &spec, 0);
+
+
+
+link:
+https://forums.libsdl.org/viewtopic.php?p=51892
+
+
+https://wiki.libsdl.org/FrontPage
